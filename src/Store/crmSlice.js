@@ -8,12 +8,13 @@ export const crmSlice = createSlice({
     activeData: null,
     activeWallet: true,
     tickets: [],
-    newEmail: [],
-    newPhono: [],
     acsaTicket: [],
-    acsappu:[],
-    descuento:[],
-    Gestiones:[],
+    acsappu: [],
+    descuento: [],
+    descuentoAvo: [],
+    diary: [],
+    Gestiones: [],
+    allCallAgain: [],
     pageColor: {
       cnor: "linear-gradient(to bottom, #f0fff0, #d4f7d4)",
       vsur: "linear-gradient(to bottom, #f0f8ff, #d4e6f7)",
@@ -34,12 +35,31 @@ export const crmSlice = createSlice({
     },
     changeColor: "",
     setColor: "",
-    tree:true,
-    changeTreeManagement:''
+    tree: true,
+    changeTreeManagement: "",
+    valueRut: "",
+    newEmail: [],
+    newPhono: [],
+    patentesAvo: [],
+    walletNumber: {
+      acsa: 11,
+      avo: 22,
+      global: 1,
+      svia: 29,
+    },
+    numeroCartera: null,
+    telefonos: null,
+    valueRutBack:null,
+    blockButton:false
   },
   reducers: {
     onSetAllInfo: (state, { payload }) => {
+      const { company } = payload;
       state.allInfo = payload;
+      state.numeroCartera = state.walletNumber[company];
+    },
+    onSetAllPhonos: (state, { payload }) => {
+      state.telefonos = payload;
     },
     onSetActiveData: (state, { payload }) => {
       state.activeData = payload;
@@ -47,11 +67,7 @@ export const crmSlice = createSlice({
     onSetActiveClasification: (state, { payload }) => {
       state.clasifications = payload;
     },
-    onSetActiveWallet: (state) => {
-      state.activeWallet = !state.activeWallet;
-    },
     onSetTickets: (state, { payload }) => {
-      console.log(payload, 'soy los tickets de acsa')
       state.tickets = payload;
     },
     onSetAddEmail: (state, { payload }) => {
@@ -61,8 +77,7 @@ export const crmSlice = createSlice({
       state.newPhono.push(payload);
     },
     onGetTicketAcsa: (state, { payload }) => {
-      console.log(payload,'boletas')
-      state.acsaTicket =payload ;
+      state.acsaTicket = payload;
     },
     onGetPpu: (state, { payload }) => {
       state.acsappu = payload;
@@ -70,20 +85,50 @@ export const crmSlice = createSlice({
     onGetDescuento: (state, { payload }) => {
       state.descuento = payload;
     },
+    onGetDescuentoAvo: (state, { payload }) => {
+      state.descuentoAvo = payload;
+    },
     onGetGestiones: (state, { payload }) => {
       state.Gestiones = payload;
     },
+    onSetPatentesAvo: (state, { payload }) => {
+      state.patentesAvo = payload;
+    },
     onPaintWallet: (state, { payload }) => {
-      const {path} = payload
-      console.log('caballeros',path)
-      state.changeColor = state.pageColor[path];
-      state.setColor = state.colorText[path];
+      const { company } = payload;
+      console.log({company},'estoy en el payload')
+      state.changeColor = state.pageColor[company];
+      state.setColor = state.colorText[company];
     },
     onChangeTree: (state, { payload }) => {
       state.changeTreeManagement = payload;
     },
-    onSelect:(state)=>{
-      state.tree = !state.tree
+    onGetDiary: (state, { payload }) => {
+      state.diary = payload;
+    },
+    onGetCallAgain: (state, { payload }) => {
+      state.allCallAgain = payload;
+    },
+    onSelect: (state) => {
+      state.tree = !state.tree;
+    },
+    onInputRut: (state, { payload }) => {
+      state.valueRut = payload;
+    },
+    onInputRutBack: (state, { payload }) => {
+      state.valueRutBack = payload;
+    },
+    clearPhono: (state) => {
+      state.newPhono = [];
+    },
+    buttonBlock: (state,{payload}) => {
+      state.blockButton = payload;
+    },
+    clearMail: (state) => {
+      state.newEmail = [];
+    },
+    clearAllData: (state) => {
+      (state.descuento = []), (state.acsappu = []);
     },
   },
 });
@@ -94,7 +139,6 @@ export const {
   onSetTickets,
   onSetAddPhone,
   onSetAddEmail,
-  onSetActiveWallet,
   onSetAllInfo,
   onGetTicketAcsa,
   onGetPpu,
@@ -102,5 +146,16 @@ export const {
   onGetDescuento,
   onGetGestiones,
   onChangeTree,
-  onSelect
+  onSelect,
+  onInputRut,
+  clearMail,
+  clearPhono,
+  clearAllData,
+  onGetDiary,
+  onSetPatentesAvo,
+  onGetDescuentoAvo,
+  onSetAllPhonos,
+  onGetCallAgain,
+  onInputRutBack,
+  buttonBlock
 } = crmSlice.actions;
